@@ -70,6 +70,14 @@
 
   function vibrate(pattern) {
     if (!state.vibrationOn) return;
+    // Capacitor Haptics (native iOS/Android) if available
+    const cap = window.Capacitor;
+    const haptics = cap && cap.Plugins && cap.Plugins.Haptics;
+    if (haptics) {
+      const isMilestone = Array.isArray(pattern);
+      haptics.impact({ style: isMilestone ? 'HEAVY' : 'LIGHT' }).catch(() => {});
+      return;
+    }
     if (navigator.vibrate) navigator.vibrate(pattern);
   }
 
@@ -211,6 +219,13 @@
 
   // unlock audio context on first user gesture (iOS)
   document.addEventListener('touchstart', () => getAudio(), { once: true, passive: true });
+
+  // register service worker (skip on native Capacitor - not needed there)
+  if ('serviceWorker' in navigator && !window.Capacitor) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
 
   render();
 })();

@@ -1,0 +1,22 @@
+{
+  "appId": "com.tasbih.app",
+  "appName": "سبحة",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "contentInset": "always",
+    "backgroundColor": "#F5F1E8"
+  },
+  "android": {
+    "backgroundColor": "#F5F1E8"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 800,
+      "backgroundColor": "#F5F1E8",
+      "showSpinner": false
+    }
+  }
+}
