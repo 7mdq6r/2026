@@ -1,0 +1,20 @@
+{
+  "name": "سبحة - Tasbih",
+  "short_name": "سبحة",
+  "description": "تطبيق سبحة إلكترونية بتصميم فاتح وهادئ",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F1E8",
+  "theme_color": "#F5F1E8",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='42' fill='%23F5F1E8'/><circle cx='96' cy='96' r='62' fill='none' stroke='%23D4AF37' stroke-width='8'/><text x='96' y='112' font-size='60' text-anchor='middle' fill='%232C3E2D' font-family='Amiri,serif' font-weight='700'>ﷲ</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
