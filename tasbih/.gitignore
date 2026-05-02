@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+*.log
+
+# Capacitor generated native projects — regenerate with `npx cap add <platform>`
+ios/
+android/
+.capacitor/
+
+# Build output
+dist/
+build/

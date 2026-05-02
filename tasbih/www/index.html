@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#F5F1E8">
+  <title>سبحة</title>
+
+  <!-- iOS PWA support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="سبحة">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <h1 class="dhikr" id="dhikr">سبحان الله</h1>
+      <p class="cycles">الدورات: <span id="cycles">0</span></p>
+    </header>
+
+    <div class="counter-wrap">
+      <svg class="progress-ring" viewBox="0 0 280 280">
+        <circle class="progress-track" cx="140" cy="140" r="130"></circle>
+        <circle class="progress-bar" id="progressBar" cx="140" cy="140" r="130"
+                stroke-dasharray="816.81" stroke-dashoffset="816.81"></circle>
+      </svg>
+
+      <button class="counter-btn" id="counterBtn" aria-label="زيادة العدد">
+        <span class="count-label">العدد</span>
+        <span class="count-value" id="countValue">0</span>
+        <span class="count-target">/ <span id="targetValue">33</span></span>
+      </button>
+
+      <div class="ripple" id="ripple"></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">الإجمالي</span>
+        <span class="stat-value" id="totalValue">0</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl-btn" id="resetBtn" aria-label="إعادة التصفير">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+          <polyline points="3 4 3 10 9 10"></polyline>
+        </svg>
+        <span>تصفير</span>
+      </button>
+
+      <button class="ctrl-btn" id="dhikrBtn" aria-label="تغيير الذكر">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        <span>الذكر</span>
+      </button>
+
+      <button class="ctrl-btn" id="soundBtn" aria-label="تبديل الصوت">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" id="soundOn"></path>
+        </svg>
+        <span id="soundLabel">الصوت</span>
+      </button>
+    </div>
+
+    <div class="dhikr-menu" id="dhikrMenu">
+      <div class="menu-backdrop" id="menuBackdrop"></div>
+      <div class="menu-sheet">
+        <h2>اختر الذكر</h2>
+        <ul id="dhikrList"></ul>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
