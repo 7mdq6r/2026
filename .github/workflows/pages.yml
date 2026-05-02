@@ -5,9 +5,6 @@ on:
     branches:
       - claude/clarify-session-purpose-bGCzb
       - main
-    paths:
-      - 'tasbih/www/**'
-      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
