@@ -1,0 +1,855 @@
+<title>صُنّاع — إعادة تصميم الشاشة الرئيسية</title>
+
+<style>
+/* ══════════════════════════════════════════════════════════
+   صُنّاع — Home redesign
+   Palette: "طين وعنّاب" — Qatari clay, pomegranate, brass
+   ══════════════════════════════════════════════════════════ */
+
+:root{
+  /* — app brand tokens (fixed: the product commits to one light world) — */
+  --sand-50:#FBF6EC;
+  --sand-100:#F2E8D8;
+  --sand-200:#E6D8C1;
+  --surface:#FFFFFF;
+  --pom:#8C1C31;
+  --pom-deep:#5E1020;
+  --gold:#C08A34;
+  --gold-ink:#7E5A18;
+  --ink:#241C16;
+  --ink-2:#6A5C4E;
+  --open:#2E6A4E;
+  --open-bg:#E4EFE7;
+
+  /* — presentation shell tokens (themed) — */
+  --shell-bg:#EFE6D6;
+  --shell-bg-2:#E5D8C2;
+  --shell-ink:#2C231B;
+  --shell-ink-2:#6E6153;
+  --shell-card:#FBF6EC;
+  --shell-line:#D9C9AF;
+  --shell-accent:#7E5A18;
+
+  --ar:"SF Arabic","Geeza Pro","Noto Kufi Arabic","Noto Sans Arabic","Dubai",
+       "Segoe UI",Tahoma,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  --star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cpath d='M32 6 39 19 52 13 46 26 59 32 46 38 52 51 39 45 32 58 25 45 12 51 18 38 5 32 18 26 12 13 25 19Z' fill='none' stroke='%23C08A34' stroke-width='1.1'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme:dark){
+  :root{
+    --shell-bg:#1A1512; --shell-bg-2:#241D18;
+    --shell-ink:#F1E7D8; --shell-ink-2:#A2937F;
+    --shell-card:#241D18; --shell-line:#3B3026;
+    --shell-accent:#D9A64A;
+  }
+}
+:root[data-theme="dark"]{
+  --shell-bg:#1A1512; --shell-bg-2:#241D18;
+  --shell-ink:#F1E7D8; --shell-ink-2:#A2937F;
+  --shell-card:#241D18; --shell-line:#3B3026;
+  --shell-accent:#D9A64A;
+}
+:root[data-theme="light"]{
+  --shell-bg:#EFE6D6; --shell-bg-2:#E5D8C2;
+  --shell-ink:#2C231B; --shell-ink-2:#6E6153;
+  --shell-card:#FBF6EC; --shell-line:#D9C9AF;
+  --shell-accent:#7E5A18;
+}
+
+*{box-sizing:border-box}
+
+.page{
+  direction:rtl;
+  font-family:var(--ar);
+  background:
+    radial-gradient(90rem 50rem at 80% -10%,var(--shell-bg-2),transparent 60%),
+    var(--shell-bg);
+  color:var(--shell-ink);
+  min-height:100vh;
+  padding:clamp(20px,4vw,56px) clamp(14px,4vw,40px) 72px;
+  -webkit-font-smoothing:antialiased;
+}
+.page :focus-visible{outline:2.5px solid var(--shell-accent);outline-offset:3px;border-radius:6px}
+
+/* ── masthead ───────────────────────────────────────────── */
+.mast{max-width:1180px;margin:0 auto clamp(24px,4vw,44px)}
+.mast .eyebrow{
+  font-size:12px;letter-spacing:.16em;font-weight:700;
+  color:var(--shell-accent);margin:0 0 10px;
+}
+.mast h1{
+  margin:0;font-size:clamp(26px,4.4vw,42px);font-weight:800;
+  letter-spacing:-.01em;line-height:1.25;text-wrap:balance;
+}
+.mast p{
+  margin:12px 0 0;max-width:62ch;line-height:1.75;
+  color:var(--shell-ink-2);font-size:clamp(14px,1.6vw,16px);
+}
+
+/* ── two-column handoff layout ──────────────────────────── */
+.layout{
+  max-width:1180px;margin:0 auto;
+  display:grid;gap:clamp(28px,4vw,56px);
+  grid-template-columns:1fr;
+  align-items:start;
+}
+@media(min-width:940px){
+  .layout{grid-template-columns:minmax(0,1fr) auto}
+}
+
+.stage{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  position:sticky;top:24px;
+}
+@media(max-width:939px){.stage{position:static;order:-1}}
+
+/* ── device ─────────────────────────────────────────────── */
+.device{
+  width:390px;max-width:100%;height:788px;
+  background:#0F0B08;
+  border-radius:46px;
+  padding:11px;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,.10) inset,
+    0 40px 80px -24px rgba(40,20,10,.55),
+    0 0 0 1px rgba(0,0,0,.35);
+  position:relative;
+}
+.device::after{
+  content:"";position:absolute;bottom:9px;left:50%;transform:translateX(-50%);
+  width:118px;height:4px;border-radius:4px;background:rgba(255,255,255,.35);
+  pointer-events:none;z-index:6;
+}
+
+/* ══════ THE SCREEN — everything under .scr ══════ */
+.scr{
+  height:100%;border-radius:36px;overflow:hidden;
+  background:var(--sand-50);color:var(--ink);
+  display:flex;flex-direction:column;position:relative;
+}
+.scr button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.scr :focus-visible{outline:2.5px solid var(--pom);outline-offset:2px}
+
+/* status bar */
+.sb{
+  flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;
+  padding:14px 24px 4px;font-size:15px;font-weight:700;
+  font-family:var(--mono);font-variant-numeric:tabular-nums;
+}
+.sb .right{display:flex;gap:6px;align-items:center;font-family:var(--ar);font-size:12px}
+
+/* scrolling body */
+.body{
+  flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;
+  padding-bottom:18px;scrollbar-width:none;
+}
+.body::-webkit-scrollbar{display:none}
+
+/* ── FIX: one page gutter, 20px, everywhere ── */
+.gut{padding-inline:20px}
+
+/* header */
+.hdr{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding-block:14px 16px;
+}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brand .kicker{
+  font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--gold-ink);
+}
+.brand .word{font-size:27px;font-weight:800;color:var(--pom);letter-spacing:-.01em;line-height:1.1}
+.bell{
+  width:44px;height:44px;display:grid;place-items:center;border-radius:14px;
+  background:var(--surface);box-shadow:0 1px 3px rgba(90,60,20,.10);
+  position:relative;color:var(--ink);flex:0 0 auto;
+}
+.bell .dot{
+  position:absolute;top:6px;left:6px;min-width:18px;height:18px;padding:0 5px;
+  border-radius:9px;background:var(--pom);color:#fff;
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  display:grid;place-items:center;border:2px solid var(--sand-50);
+  font-variant-numeric:tabular-nums;
+}
+
+/* search — FIX: surfaced from the tab bar */
+.search{
+  display:flex;align-items:center;gap:10px;
+  height:48px;padding-inline:14px;border-radius:16px;
+  background:var(--surface);border:1px solid var(--sand-200);
+  color:var(--ink-2);font-size:14.5px;
+  box-shadow:0 1px 2px rgba(90,60,20,.05);
+}
+.search svg{flex:0 0 auto;color:var(--ink-2)}
+.search .kbd{
+  margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;
+  color:var(--gold-ink);background:var(--sand-100);
+  padding:3px 7px;border-radius:6px;
+}
+
+/* category chips — FIX: entry point for filtering */
+.rail{
+  display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:14px 20px 4px;scrollbar-width:none;
+}
+.rail::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;scroll-snap-align:start;
+  padding:9px 15px;border-radius:999px;font-size:13.5px;font-weight:600;
+  background:var(--surface);border:1px solid var(--sand-200);color:var(--ink-2);
+  transition:background .18s,color .18s,border-color .18s;
+}
+.chip[aria-pressed="true"]{background:var(--pom);border-color:var(--pom);color:#fff}
+
+/* ── promo banner — FIX: real overlay, CTA clear of the copy ── */
+.promo{margin-top:16px}
+.slides{
+  display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding-inline:20px;scrollbar-width:none;
+}
+.slides::-webkit-scrollbar{display:none}
+.slide{
+  flex:0 0 100%;scroll-snap-align:center;
+  position:relative;height:186px;border-radius:22px;overflow:hidden;
+  background:linear-gradient(215deg,var(--pom) 0%,var(--pom-deep) 78%);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:18px;isolation:isolate;
+}
+.slide .motif{
+  position:absolute;inset:0;background-image:var(--star);
+  background-size:74px;opacity:.16;z-index:-2;
+}
+.slide .scrim{
+  position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(to top,rgba(46,8,18,.82) 0%,rgba(46,8,18,.28) 58%,transparent 100%);
+}
+.slide .tag{
+  align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.1em;
+  color:#F0D9A8;border:1px solid rgba(240,217,168,.45);
+  padding:4px 9px;border-radius:999px;margin-bottom:auto;
+}
+.slide h3{margin:0 0 5px;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.01em}
+.slide p{margin:0 0 14px;font-size:13px;line-height:1.5;color:rgba(255,255,255,.86);max-width:26ch}
+.cta{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:8px;
+  min-height:40px;padding:0 18px;border-radius:999px;
+  background:var(--gold);color:#2A1B06;font-size:14px;font-weight:800;
+  transition:transform .15s;
+}
+.cta:hover{transform:translateX(-3px)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.dots i{
+  width:6px;height:6px;border-radius:99px;background:var(--sand-200);
+  transition:width .22s,background .22s;
+}
+.dots i.on{width:20px;background:var(--pom)}
+
+/* section head */
+.shead{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin:26px 0 12px;
+}
+.shead h2{margin:0;font-size:18.5px;font-weight:800;letter-spacing:-.01em}
+.shead .all{
+  font-size:13px;font-weight:700;color:var(--gold-ink);
+  display:inline-flex;align-items:center;gap:5px;
+}
+
+/* ── أسرة الأسبوع — the ONLY gold-framed element ── */
+.hero{
+  border-radius:24px;overflow:hidden;background:var(--surface);
+  border:1.5px solid var(--gold);
+  box-shadow:0 10px 26px -14px rgba(140,28,49,.30);
+}
+.hero .art{
+  height:158px;position:relative;
+  background:
+    radial-gradient(120% 90% at 78% 12%,#F7E3BE 0%,transparent 55%),
+    linear-gradient(200deg,#B9412F 0%,#8C1C31 52%,#5E1020 100%);
+}
+.hero .art .motif{
+  position:absolute;inset:0;background-image:var(--star);background-size:58px;opacity:.2;
+}
+.hero .art .badge{
+  position:absolute;top:12px;right:12px;
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.94);color:var(--pom);
+  font-size:11.5px;font-weight:800;padding:6px 11px;border-radius:999px;
+}
+.hero .art .status{
+  position:absolute;bottom:12px;right:12px;
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--open-bg);color:var(--open);
+  font-size:11.5px;font-weight:800;padding:6px 11px;border-radius:999px;
+}
+.hero .art .status::before{
+  content:"";width:6px;height:6px;border-radius:99px;background:var(--open);
+}
+.hero .info{padding:15px 16px 16px;display:flex;flex-direction:column;gap:11px}
+.hero .row1{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.hero h3{margin:0 0 3px;font-size:19px;font-weight:800;letter-spacing:-.01em}
+.hero .meta{font-size:12.5px;color:var(--ink-2)}
+.rate{
+  display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;
+  font-family:var(--mono);font-size:13px;font-weight:700;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.rate svg{color:var(--gold)}
+.rate small{font-family:var(--ar);font-size:11px;color:var(--ink-2);font-weight:600}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tags span{
+  font-size:11.5px;font-weight:700;color:var(--gold-ink);
+  background:var(--sand-100);padding:5px 10px;border-radius:8px;
+}
+.visit{
+  height:46px;border-radius:14px;background:var(--pom);color:#fff;
+  font-size:15px;font-weight:800;width:100%;
+  display:grid;place-items:center;transition:background .18s;
+}
+.visit:hover{background:var(--pom-deep)}
+
+/* ── featured carousel — FIX: starts flush right, peeks left ── */
+.cards{
+  display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:2px 20px 6px;scrollbar-width:none;
+}
+.cards::-webkit-scrollbar{display:none}
+.card{
+  flex:0 0 158px;scroll-snap-align:start;
+  background:var(--surface);border-radius:18px;overflow:hidden;
+  border:1px solid var(--sand-200);
+  box-shadow:0 2px 8px -3px rgba(90,60,20,.14);
+  display:flex;flex-direction:column;
+}
+.card .art{height:118px;position:relative}
+.card .art .motif{position:absolute;inset:0;background-image:var(--star);background-size:46px;opacity:.17}
+.card:nth-child(1) .art{background:linear-gradient(200deg,#9C6B3E,#6E4526)}
+.card:nth-child(2) .art{background:linear-gradient(200deg,#2E6A4E,#194533)}
+.card:nth-child(3) .art{background:linear-gradient(200deg,#B9412F,#7A1F26)}
+.card:nth-child(4) .art{background:linear-gradient(200deg,#7A6BA8,#453C69)}
+.fav{
+  position:absolute;top:4px;left:4px;
+  width:40px;height:40px;display:grid;place-items:center; /* 40px hit area */
+  color:#fff;
+}
+.fav svg{filter:drop-shadow(0 1px 3px rgba(0,0,0,.5));transition:transform .15s}
+.fav[aria-pressed="true"] svg{fill:#fff;transform:scale(1.08)}
+.card .info{padding:11px 12px 13px;display:flex;flex-direction:column;gap:6px}
+.card .cat{font-size:10.5px;font-weight:800;color:var(--gold-ink);letter-spacing:.02em}
+.card h4{margin:0;font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+.card .foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:7px;border-top:1px solid var(--sand-100);
+}
+.card .n{font-family:var(--mono);font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* skeletons */
+.sk{background:var(--sand-100);border-radius:8px;position:relative;overflow:hidden}
+.sk::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
+  animation:sweep 1.25s infinite;
+}
+@keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.card.loading .art{background:var(--sand-100)}
+.card.loading .art .motif,.card.loading .fav{display:none}
+.card.loading .cat,.card.loading h4,.card.loading .rate,.card.loading .n{
+  color:transparent!important;background:var(--sand-100);border-radius:6px;
+  position:relative;overflow:hidden;
+}
+.card.loading svg{visibility:hidden}
+
+/* ── tab bar — FIX: distinct glyphs, AA labels, no floating pill ── */
+.tabs{
+  flex:0 0 auto;display:grid;grid-template-columns:repeat(5,1fr);
+  background:var(--surface);border-top:1px solid var(--sand-200);
+  padding:9px 6px 22px;
+}
+.tab{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  color:var(--ink-2);font-size:11px;font-weight:700;padding:4px 0;
+  position:relative;transition:color .16s;
+}
+.tab[aria-current="page"]{color:var(--pom)}
+.tab[aria-current="page"]::before{
+  content:"";position:absolute;top:-9px;width:26px;height:3px;
+  border-radius:0 0 3px 3px;background:var(--pom);
+}
+.tab .bdg{
+  position:absolute;top:0;left:calc(50% - 20px);
+  min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:var(--pom);color:#fff;font-family:var(--mono);font-size:9px;
+  font-weight:700;display:grid;place-items:center;border:2px solid var(--surface);
+}
+
+/* spacing-grid overlay */
+.grid-on::before{
+  content:"";position:absolute;top:0;right:0;left:0;bottom:86px;
+  z-index:9;pointer-events:none;
+  background:
+    linear-gradient(to left,rgba(140,28,49,.14) 0 20px,transparent 20px),
+    linear-gradient(to right,rgba(140,28,49,.14) 0 20px,transparent 20px),
+    repeating-linear-gradient(to bottom,rgba(140,28,49,.08) 0 1px,transparent 1px 8px);
+}
+
+/* ── stage controls ─────────────────────────────────────── */
+.ctrls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ctrl{
+  font-family:var(--ar);font-size:12.5px;font-weight:700;cursor:pointer;
+  padding:8px 14px;border-radius:999px;
+  background:transparent;color:var(--shell-ink-2);
+  border:1px solid var(--shell-line);transition:.18s;
+}
+.ctrl:hover{color:var(--shell-ink)}
+.ctrl[aria-pressed="true"]{
+  background:var(--shell-accent);border-color:var(--shell-accent);
+  color:var(--shell-bg);
+}
+
+/* ── handoff notes ──────────────────────────────────────── */
+.notes{display:flex;flex-direction:column;gap:clamp(22px,3vw,34px);min-width:0}
+.block > h2{
+  margin:0 0 4px;font-size:12px;font-weight:800;letter-spacing:.16em;
+  color:var(--shell-accent);
+}
+.block > .lede{
+  margin:0 0 16px;font-size:14px;line-height:1.7;color:var(--shell-ink-2);
+  max-width:60ch;
+}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px}
+.sw{
+  border:1px solid var(--shell-line);border-radius:12px;overflow:hidden;
+  background:var(--shell-card);
+}
+.sw .chip-c{height:52px}
+.sw .t{padding:9px 11px 11px;display:flex;flex-direction:column;gap:2px}
+.sw .nm{font-size:12.5px;font-weight:800}
+.sw .hx{font-family:var(--mono);font-size:11px;color:var(--shell-ink-2)}
+.sw .cr{
+  font-family:var(--mono);font-size:10.5px;color:var(--shell-accent);
+  font-variant-numeric:tabular-nums;
+}
+
+.fixes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.fixes li{
+  display:grid;grid-template-columns:auto 1fr;gap:14px;
+  padding:14px 0;border-top:1px solid var(--shell-line);
+}
+.fixes li:last-child{border-bottom:1px solid var(--shell-line)}
+.fixes .sev{
+  width:9px;height:9px;border-radius:99px;margin-top:7px;
+}
+.sev.crit{background:#B02A37}
+.sev.major{background:#C0791F}
+.sev.minor{background:#4F7A5E}
+.fixes b{display:block;font-size:14.5px;font-weight:800;margin-bottom:3px}
+.fixes span{font-size:13.5px;line-height:1.65;color:var(--shell-ink-2)}
+.fixes code{
+  font-family:var(--mono);font-size:12px;
+  background:var(--shell-card);border:1px solid var(--shell-line);
+  padding:1px 5px;border-radius:5px;color:var(--shell-ink);
+}
+
+.scale{width:100%;border-collapse:collapse;font-size:13.5px}
+.scale th,.scale td{
+  text-align:right;padding:9px 10px;border-bottom:1px solid var(--shell-line);
+}
+.scale th{
+  font-size:11px;letter-spacing:.1em;color:var(--shell-ink-2);font-weight:700;
+}
+.scale td:first-child{font-weight:800}
+.scale td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--shell-ink-2)}
+.tblwrap{overflow-x:auto}
+
+.foot{
+  max-width:1180px;margin:clamp(34px,5vw,60px) auto 0;
+  padding-top:20px;border-top:1px solid var(--shell-line);
+  font-size:12.5px;line-height:1.8;color:var(--shell-ink-2);
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+
+<div class="page">
+
+  <header class="mast">
+    <p class="eyebrow">مراجعة تصميم · نسخة مقترحة</p>
+    <h1>صُنّاع — الشاشة الرئيسية، مُعاد بناؤها</h1>
+    <p>
+      نفس الهوية: عنّابي قطري، نحاسي، ورملي. التغيير في البنية لا في الروح — مدخل بحث في الأعلى،
+      شبكة هوامش واحدة، إطار ذهبي محجوز لعنصر واحد فقط، وبطاقات تحمل ما يكفي لاتخاذ قرار.
+      الشاشة أدناه حيّة: مرّر الشرائط، بدّل التصنيفات، جرّب حالة التحميل.
+    </p>
+  </header>
+
+  <div class="layout">
+
+    <!-- ═══════════ handoff notes ═══════════ -->
+    <div class="notes">
+
+      <section class="block">
+        <h2>الألوان</h2>
+        <p class="lede">
+          النحاسي بقي للزخرفة والحدود فقط؛ نصوصه انتقلت إلى درجة أغمق تعبر معيار AA على الأرضية الرملية.
+          الأخضر والبرتقالي دلاليان (حالة الطلبات) ولا يُحسبان ضمن لون الهوية.
+        </p>
+        <div class="swatches">
+          <div class="sw"><div class="chip-c" style="background:#8C1C31"></div>
+            <div class="t"><span class="nm">عنّابي — أساسي</span><span class="hx">#8C1C31</span><span class="cr">8.2:1 على الرملي</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:#5E1020"></div>
+            <div class="t"><span class="nm">عنّابي عميق</span><span class="hx">#5E1020</span><span class="cr">للتدرّج والضغط</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:#C08A34"></div>
+            <div class="t"><span class="nm">نحاسي — زخرفة</span><span class="hx">#C08A34</span><span class="cr">حدود وأيقونات فقط</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:#7E5A18"></div>
+            <div class="t"><span class="nm">نحاسي — نصّي</span><span class="hx">#7E5A18</span><span class="cr">5.7:1 ✓ AA</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:#FBF6EC;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></div>
+            <div class="t"><span class="nm">رملي — أرضية</span><span class="hx">#FBF6EC</span><span class="cr">أساس الشاشة</span></div></div>
+          <div class="sw"><div class="chip-c" style="background:#6A5C4E"></div>
+            <div class="t"><span class="nm">محايد ثانوي</span><span class="hx">#6A5C4E</span><span class="cr">6.0:1 ✓ AA</span></div></div>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>ما الذي تغيّر</h2>
+        <p class="lede">كل بند هنا يقابل ملاحظة من المراجعة السابقة، مرتّبة بحسب الخطورة.</p>
+        <ul class="fixes">
+          <li><i class="sev crit"></i><div>
+            <b>«استكشف الأسر» بدل «الأسرى»</b>
+            <span>الخطأ كان على الزر الأساسي. صُحّح، ونصّ الإعلان أعيدت صياغته إلى وعد ملموس بدل عبارة نائبة.</span>
+          </div></li>
+          <li><i class="sev crit"></i><div>
+            <b>كرت أسرة الأسبوع نُظّف بالكامل</b>
+            <span>محتوى شاشة الباقات كان مسرّبًا فوقه — بما فيه نصّ <code>السعر الحقيقي من Apple</code>. الكرت الآن يعرض ما يخصّ الأسرة وحدها: اسم، منطقة، تصنيف، تقييم، حالة الطلبات، ودعوة واحدة.</span>
+          </div></li>
+          <li><i class="sev crit"></i><div>
+            <b>لا صور مكسورة</b>
+            <span>كل مساحة صورة لها خلفية بديلة من الهوية، وحالة تحميل هيكلية بدلها. جرّب زر «حالة التحميل» تحت الجهاز.</span>
+          </div></li>
+          <li><i class="sev major"></i><div>
+            <b>الشريط الأفقي يبدأ من اليمين</b>
+            <span><code>padding-inline:20px</code> مع <code>scroll-snap-align:start</code> — أول بطاقة كاملة على اليمين، والقصّ يظهر على اليسار كإشارة مقصودة للتمرير.</span>
+          </div></li>
+          <li><i class="sev major"></i><div>
+            <b>هامش واحد لكل الشاشة</b>
+            <span>٢٠ بكسل على الجانبين، وسُلّم تباعد من مضاعفات ٤. الشرائط الأفقية تمدّ حشوتها داخليًا فتبقى محاذية لبقية المحتوى. فعّل «شبكة التباعد» لرؤيتها.</span>
+          </div></li>
+          <li><i class="sev major"></i><div>
+            <b>الإطار الذهبي صار نادرًا</b>
+            <span>عنصر واحد فقط في الشاشة يحمله: أسرة الأسبوع. الباقي حدود رملية رفيعة وظلّ خفيف — فعاد للذهبي معناه.</span>
+          </div></li>
+          <li><i class="sev major"></i><div>
+            <b>شارة واحدة لكل بطاقة</b>
+            <span>ختم «صُنّاع» على كل صورة أُلغي — المستخدم داخل التطبيق أصلًا. بقيت شارة التصنيف وزر المفضلة.</span>
+          </div></li>
+          <li><i class="sev minor"></i><div>
+            <b>البطاقة تكفي لاتخاذ قرار</b>
+            <span>تصنيف، تقييم برقم وعدد مراجعات، وعدد منتجات — بأرقام جدولية تصطفّ رأسيًا عبر البطاقات.</span>
+          </div></li>
+          <li><i class="sev minor"></i><div>
+            <b>البحث خرج من الشريط السفلي</b>
+            <span>حقل بحث ثابت في الأعلى، وشريط تصنيفات تحته: مدخلان مباشران لسوق يُتصفَّح بالنية لا بالتسلسل.</span>
+          </div></li>
+          <li><i class="sev minor"></i><div>
+            <b>أيقونات لا تلتبس، ولمسات ٤٤ بكسل</b>
+            <span>«الأسر» صارت واجهة متجر بدل شخصين المتشابهين مع «حسابي». زر المفضلة له منطقة لمس كاملة رغم صغر الأيقونة، والجرس يحمل عدّاد الإشعارات.</span>
+          </div></li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2>سُلّم الطباعة</h2>
+        <p class="lede">
+          الأدوار تُفرَّق بالوزن والحجم والتتبّع، لا بعائلات متعددة — أنسب لواجهة عربية.
+          الأرقام وحدها بخط أحادي جدولي حتى تصطفّ التقييمات والأعداد عبر البطاقات.
+        </p>
+        <div class="tblwrap">
+          <table class="scale">
+            <thead><tr><th>الدور</th><th>الحجم</th><th>الوزن</th><th>الاستعمال</th></tr></thead>
+            <tbody>
+              <tr><td>الشعار</td><td class="num">27</td><td class="num">800</td><td>صُنّاع في الترويسة</td></tr>
+              <tr><td>عنوان بارز</td><td class="num">20</td><td class="num">800</td><td>عنوان البانر</td></tr>
+              <tr><td>عنوان قسم</td><td class="num">18.5</td><td class="num">800</td><td>أسرة الأسبوع · الأسر المميزة</td></tr>
+              <tr><td>اسم بطاقة</td><td class="num">14.5</td><td class="num">800</td><td>بطاقات الأسر</td></tr>
+              <tr><td>نصّ</td><td class="num">13–14.5</td><td class="num">400–600</td><td>الوصف والحقول</td></tr>
+              <tr><td>لصيقة</td><td class="num">10.5–12</td><td class="num">700–800</td><td>التصنيف والشارات</td></tr>
+              <tr><td>رقم</td><td class="num">11–13</td><td class="num">700</td><td>تقييم · عدّاد · عدد منتجات</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ═══════════ device ═══════════ -->
+    <div class="stage">
+      <div class="device">
+        <div class="scr" id="scr">
+
+          <div class="sb">
+            <span>٥:١٠</span>
+            <span class="right">4G · ٨٤٪</span>
+          </div>
+
+          <div class="body" id="body">
+
+            <div class="gut">
+              <div class="hdr">
+                <div class="brand">
+                  <span class="kicker">منصة الأسر المنتجة</span>
+                  <span class="word">صُنّاع</span>
+                </div>
+                <button class="bell" aria-label="الإشعارات، ٣ غير مقروءة">
+                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+                  <span class="dot">٣</span>
+                </button>
+              </div>
+
+              <div class="search" role="search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+                <span>ابحث عن أسرة أو منتج</span>
+                <span class="kbd">٣٤٠ أسرة</span>
+              </div>
+            </div>
+
+            <div class="rail" role="group" aria-label="التصنيفات">
+              <button class="chip" aria-pressed="true">الكل</button>
+              <button class="chip" aria-pressed="false">بخور وعطور</button>
+              <button class="chip" aria-pressed="false">حلويات</button>
+              <button class="chip" aria-pressed="false">مأكولات بيتية</button>
+              <button class="chip" aria-pressed="false">حرف يدوية</button>
+              <button class="chip" aria-pressed="false">مشاتل</button>
+            </div>
+
+            <div class="promo">
+              <div class="slides" id="slides">
+                <article class="slide">
+                  <span class="motif" aria-hidden="true"></span><span class="scrim" aria-hidden="true"></span>
+                  <span class="tag">للأسر المسجّلة</span>
+                  <h3>منتجاتك أمام ٤٠ ألف زائر</h3>
+                  <p>احجز مساحتك الإعلانية داخل صُنّاع وتصدّر نتائج تصنيفك.</p>
+                  <button class="cta">احجز مساحتك
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+                  </button>
+                </article>
+                <article class="slide" style="background:linear-gradient(215deg,#9C6B3E,#4E3117)">
+                  <span class="motif" aria-hidden="true"></span><span class="scrim" aria-hidden="true"></span>
+                  <span class="tag">موسم الصيف</span>
+                  <h3>٦٠ أسرة جديدة هذا الشهر</h3>
+                  <p>بخور، حلويات، ومشاتل من كل بلديات قطر.</p>
+                  <button class="cta">استكشف الأسر
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+                  </button>
+                </article>
+              </div>
+              <div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i></div>
+            </div>
+
+            <div class="gut">
+              <div class="shead"><h2>أسرة الأسبوع</h2></div>
+
+              <article class="hero">
+                <div class="art">
+                  <span class="motif" aria-hidden="true"></span>
+                  <span class="badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>
+                    اختيار المحرّرين
+                  </span>
+                  <span class="status">تستقبل الطلبات</span>
+                </div>
+                <div class="info">
+                  <div class="row1">
+                    <div>
+                      <h3>أسرة الدانة</h3>
+                      <p class="meta">الوكرة · قطر</p>
+                    </div>
+                    <span class="rate">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>
+                      4.9 <small>(١٢٨)</small>
+                    </span>
+                  </div>
+                  <div class="tags"><span>بخور وعطور</span><span>توصيل خلال يوم</span><span>٤٢ منتج</span></div>
+                  <button class="visit">زيارة المتجر</button>
+                </div>
+              </article>
+
+              <div class="shead">
+                <h2>الأسر المميزة</h2>
+                <a class="all" href="#">عرض الكل
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="cards" id="cards">
+              <article class="card">
+                <div class="art"><span class="motif" aria-hidden="true"></span>
+                  <button class="fav" aria-pressed="false" aria-label="إضافة أسرة الوجبة إلى المفضلة">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.1 5.1 0 0 0-7.2 0L12 7.2l-1.6-1.6a5.1 5.1 0 0 0-7.2 7.2l8.8 8.8 8.8-8.8a5.1 5.1 0 0 0 0-7.2Z"/></svg>
+                  </button>
+                </div>
+                <div class="info">
+                  <span class="cat">حلويات</span>
+                  <h4>أسرة الوجبة</h4>
+                  <div class="foot">
+                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>4.8</span>
+                    <span class="n">٢٤ منتج</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="art"><span class="motif" aria-hidden="true"></span>
+                  <button class="fav" aria-pressed="true" aria-label="إزالة مشتل ويو من المفضلة">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.1 5.1 0 0 0-7.2 0L12 7.2l-1.6-1.6a5.1 5.1 0 0 0-7.2 7.2l8.8 8.8 8.8-8.8a5.1 5.1 0 0 0 0-7.2Z"/></svg>
+                  </button>
+                </div>
+                <div class="info">
+                  <span class="cat">مشاتل</span>
+                  <h4>مشتل ويو</h4>
+                  <div class="foot">
+                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>4.6</span>
+                    <span class="n">١٧ منتج</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="art"><span class="motif" aria-hidden="true"></span>
+                  <button class="fav" aria-pressed="false" aria-label="إضافة أسرة البلسم إلى المفضلة">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.1 5.1 0 0 0-7.2 0L12 7.2l-1.6-1.6a5.1 5.1 0 0 0-7.2 7.2l8.8 8.8 8.8-8.8a5.1 5.1 0 0 0 0-7.2Z"/></svg>
+                  </button>
+                </div>
+                <div class="info">
+                  <span class="cat">بخور وعطور</span>
+                  <h4>أسرة البلسم</h4>
+                  <div class="foot">
+                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>4.9</span>
+                    <span class="n">٣١ منتج</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="art"><span class="motif" aria-hidden="true"></span>
+                  <button class="fav" aria-pressed="false" aria-label="إضافة أسرة السدرة إلى المفضلة">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.1 5.1 0 0 0-7.2 0L12 7.2l-1.6-1.6a5.1 5.1 0 0 0-7.2 7.2l8.8 8.8 8.8-8.8a5.1 5.1 0 0 0 0-7.2Z"/></svg>
+                  </button>
+                </div>
+                <div class="info">
+                  <span class="cat">حرف يدوية</span>
+                  <h4>أسرة السدرة</h4>
+                  <div class="foot">
+                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>4.7</span>
+                    <span class="n">٢٨ منتج</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+          </div>
+
+          <nav class="tabs" aria-label="التنقّل الرئيسي">
+            <button class="tab" aria-current="page">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg>
+              الرئيسية
+            </button>
+            <button class="tab">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 4.8 4h14.4L21 8.5"/><path d="M3 8.5a2.6 2.6 0 0 0 4.5 1.8 2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0A2.6 2.6 0 0 0 21 8.5"/><path d="M5 11.5V20h14v-8.5"/></svg>
+              الأسر
+            </button>
+            <button class="tab">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+              البحث
+            </button>
+            <button class="tab">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.1 5.1 0 0 0-7.2 0L12 7.2l-1.6-1.6a5.1 5.1 0 0 0-7.2 7.2l8.8 8.8 8.8-8.8a5.1 5.1 0 0 0 0-7.2Z"/></svg>
+              المفضلة
+              <span class="bdg">٥</span>
+            </button>
+            <button class="tab">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+              حسابي
+            </button>
+          </nav>
+
+        </div>
+      </div>
+
+      <div class="ctrls">
+        <button class="ctrl" id="gridBtn" aria-pressed="false">شبكة التباعد ٢٠/٨</button>
+        <button class="ctrl" id="loadBtn" aria-pressed="false">حالة التحميل</button>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="foot">
+    الشاشة عمدًا بعالم بصري واحد فاتح — هذا قرار للمنتج نفسه، فالأرضية الرملية جزء من الهوية.
+    صفحة العرض حولها تتبع سمة جهازك. مساحات الصور مبنية من تدرّجات ونقش نجمة ثمانية بدل صور خارجية،
+    حتى يظهر النظام دون أن يعتمد على أصول لم تُنتَج بعد.
+  </p>
+
+</div>
+
+<script>
+(function(){
+  var scr = document.getElementById('scr');
+
+  // category chips
+  document.querySelectorAll('.rail .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('.rail .chip').forEach(function(o){
+        o.setAttribute('aria-pressed','false');
+      });
+      c.setAttribute('aria-pressed','true');
+    });
+  });
+
+  // favourites
+  document.querySelectorAll('.fav').forEach(function(f){
+    f.addEventListener('click', function(){
+      var on = f.getAttribute('aria-pressed') === 'true';
+      f.setAttribute('aria-pressed', on ? 'false' : 'true');
+    });
+  });
+
+  // tabs
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(o){ o.removeAttribute('aria-current'); });
+      t.setAttribute('aria-current','page');
+    });
+  });
+
+  // banner dots (RTL-safe: scrollLeft can be negative)
+  var slides = document.getElementById('slides');
+  var dots = document.getElementById('dots').children;
+  slides.addEventListener('scroll', function(){
+    var i = Math.round(Math.abs(slides.scrollLeft) / slides.clientWidth);
+    for (var d = 0; d < dots.length; d++){
+      dots[d].classList.toggle('on', d === i);
+    }
+  }, {passive:true});
+
+  // stage controls
+  var gridBtn = document.getElementById('gridBtn');
+  gridBtn.addEventListener('click', function(){
+    var on = gridBtn.getAttribute('aria-pressed') === 'true';
+    gridBtn.setAttribute('aria-pressed', on ? 'false' : 'true');
+    scr.classList.toggle('grid-on', !on);
+  });
+
+  var loadBtn = document.getElementById('loadBtn');
+  loadBtn.addEventListener('click', function(){
+    var on = loadBtn.getAttribute('aria-pressed') === 'true';
+    loadBtn.setAttribute('aria-pressed', on ? 'false' : 'true');
+    document.querySelectorAll('#cards .card').forEach(function(c){
+      c.classList.toggle('loading', !on);
+    });
+  });
+})();
+</script>
