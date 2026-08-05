@@ -129,16 +129,18 @@
   background:var(--sand-50);color:var(--ink);
   display:flex;flex-direction:column;position:relative;
 }
-.scr button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+/* reset carries NO background — component rules own it (specificity trap) */
+.scr button{font:inherit;color:inherit;border:0;cursor:pointer}
+.scr a{text-decoration:none;color:inherit}
 .scr :focus-visible{outline:2.5px solid var(--pom);outline-offset:2px}
 
 /* status bar */
 .sb{
   flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;
   padding:14px 24px 4px;font-size:15px;font-weight:700;
-  font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-variant-numeric:tabular-nums;
 }
-.sb .right{display:flex;gap:6px;align-items:center;font-family:var(--ar);font-size:12px}
+.sb .right{display:flex;gap:6px;align-items:center;font-size:12.5px}
 
 /* scrolling body */
 .body{
@@ -166,9 +168,9 @@
   position:relative;color:var(--ink);flex:0 0 auto;
 }
 .bell .dot{
-  position:absolute;top:6px;left:6px;min-width:18px;height:18px;padding:0 5px;
+  position:absolute;top:5px;left:5px;min-width:18px;height:18px;padding:0 5px;
   border-radius:9px;background:var(--pom);color:#fff;
-  font-family:var(--mono);font-size:10px;font-weight:700;
+  font-size:10.5px;font-weight:800;line-height:1;
   display:grid;place-items:center;border:2px solid var(--sand-50);
   font-variant-numeric:tabular-nums;
 }
@@ -183,9 +185,10 @@
 }
 .search svg{flex:0 0 auto;color:var(--ink-2)}
 .search .kbd{
-  margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;
+  margin-inline-start:auto;font-size:11px;font-weight:700;
   color:var(--gold-ink);background:var(--sand-100);
-  padding:3px 7px;border-radius:6px;
+  padding:4px 8px;border-radius:6px;font-variant-numeric:tabular-nums;
+  white-space:nowrap;
 }
 
 /* category chips — FIX: entry point for filtering */
@@ -205,12 +208,12 @@
 /* ── promo banner — FIX: real overlay, CTA clear of the copy ── */
 .promo{margin-top:16px}
 .slides{
-  display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
-  padding-inline:20px;scrollbar-width:none;
+  display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding-inline:20px;scroll-padding-inline:20px;scrollbar-width:none;
 }
 .slides::-webkit-scrollbar{display:none}
 .slide{
-  flex:0 0 100%;scroll-snap-align:center;
+  flex:0 0 100%;scroll-snap-align:start;
   position:relative;height:186px;border-radius:22px;overflow:hidden;
   background:linear-gradient(215deg,var(--pom) 0%,var(--pom-deep) 78%);
   display:flex;flex-direction:column;justify-content:flex-end;
@@ -265,8 +268,8 @@
 .hero .art{
   height:158px;position:relative;
   background:
-    radial-gradient(120% 90% at 78% 12%,#F7E3BE 0%,transparent 55%),
-    linear-gradient(200deg,#B9412F 0%,#8C1C31 52%,#5E1020 100%);
+    radial-gradient(90% 70% at 82% 8%,rgba(247,227,190,.34) 0%,transparent 62%),
+    linear-gradient(200deg,#A8352C 0%,#8C1C31 52%,#5E1020 100%);
 }
 .hero .art .motif{
   position:absolute;inset:0;background-image:var(--star);background-size:58px;opacity:.2;
@@ -292,8 +295,11 @@
 .hero .meta{font-size:12.5px;color:var(--ink-2)}
 .rate{
   display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;
-  font-family:var(--mono);font-size:13px;font-weight:700;
-  font-variant-numeric:tabular-nums;color:var(--ink);
+  font-size:13px;font-weight:700;color:var(--ink);
+}
+.rate b{
+  font-family:var(--mono);font-weight:700;font-variant-numeric:tabular-nums;
+  direction:ltr;unicode-bidi:isolate;
 }
 .rate svg{color:var(--gold)}
 .rate small{font-family:var(--ar);font-size:11px;color:var(--ink-2);font-weight:600}
@@ -329,7 +335,7 @@
 .card:nth-child(3) .art{background:linear-gradient(200deg,#B9412F,#7A1F26)}
 .card:nth-child(4) .art{background:linear-gradient(200deg,#7A6BA8,#453C69)}
 .fav{
-  position:absolute;top:4px;left:4px;
+  position:absolute;top:4px;left:4px;background:transparent;
   width:40px;height:40px;display:grid;place-items:center; /* 40px hit area */
   color:#fff;
 }
@@ -339,10 +345,10 @@
 .card .cat{font-size:10.5px;font-weight:800;color:var(--gold-ink);letter-spacing:.02em}
 .card h4{margin:0;font-size:14.5px;font-weight:800;letter-spacing:-.01em}
 .card .foot{
-  display:flex;align-items:center;justify-content:space-between;
-  padding-top:7px;border-top:1px solid var(--sand-100);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-top:2px;padding-top:8px;border-top:1px solid var(--sand-100);
 }
-.card .n{font-family:var(--mono);font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.card .n{font-size:11.5px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
 
 /* skeletons */
 .sk{background:var(--sand-100);border-radius:8px;position:relative;overflow:hidden}
@@ -367,20 +373,23 @@
   padding:9px 6px 22px;
 }
 .tab{
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  color:var(--ink-2);font-size:11px;font-weight:700;padding:4px 0;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:transparent;
+  color:var(--ink-2);font-size:11px;font-weight:700;padding:2px 0;
   position:relative;transition:color .16s;
 }
-.tab[aria-current="page"]{color:var(--pom)}
-.tab[aria-current="page"]::before{
-  content:"";position:absolute;top:-9px;width:26px;height:3px;
-  border-radius:0 0 3px 3px;background:var(--pom);
+.tab .ico{
+  display:grid;place-items:center;width:52px;height:30px;border-radius:10px;
+  transition:background .18s;
 }
+.tab[aria-current="page"]{color:var(--pom)}
+.tab[aria-current="page"] .ico{background:rgba(140,28,49,.10)}
 .tab .bdg{
-  position:absolute;top:0;left:calc(50% - 20px);
+  position:absolute;top:-2px;left:calc(50% - 20px);
   min-width:16px;height:16px;padding:0 4px;border-radius:8px;
-  background:var(--pom);color:#fff;font-family:var(--mono);font-size:9px;
-  font-weight:700;display:grid;place-items:center;border:2px solid var(--surface);
+  background:var(--pom);color:#fff;font-size:9.5px;line-height:1;
+  font-weight:800;display:grid;place-items:center;border:2px solid var(--surface);
+  font-variant-numeric:tabular-nums;
 }
 
 /* spacing-grid overlay */
@@ -499,17 +508,17 @@
         </p>
         <div class="swatches">
           <div class="sw"><div class="chip-c" style="background:#8C1C31"></div>
-            <div class="t"><span class="nm">عنّابي — أساسي</span><span class="hx">#8C1C31</span><span class="cr">8.2:1 على الرملي</span></div></div>
+            <div class="t"><span class="nm">عنّابي — أساسي</span><span class="hx"><bdi>#8C1C31</bdi></span><span class="cr"><bdi>8.2:1</bdi> على الرملي</span></div></div>
           <div class="sw"><div class="chip-c" style="background:#5E1020"></div>
-            <div class="t"><span class="nm">عنّابي عميق</span><span class="hx">#5E1020</span><span class="cr">للتدرّج والضغط</span></div></div>
+            <div class="t"><span class="nm">عنّابي عميق</span><span class="hx"><bdi>#5E1020</bdi></span><span class="cr">للتدرّج والضغط</span></div></div>
           <div class="sw"><div class="chip-c" style="background:#C08A34"></div>
-            <div class="t"><span class="nm">نحاسي — زخرفة</span><span class="hx">#C08A34</span><span class="cr">حدود وأيقونات فقط</span></div></div>
+            <div class="t"><span class="nm">نحاسي — زخرفة</span><span class="hx"><bdi>#C08A34</bdi></span><span class="cr">حدود وأيقونات فقط</span></div></div>
           <div class="sw"><div class="chip-c" style="background:#7E5A18"></div>
-            <div class="t"><span class="nm">نحاسي — نصّي</span><span class="hx">#7E5A18</span><span class="cr">5.7:1 ✓ AA</span></div></div>
+            <div class="t"><span class="nm">نحاسي — نصّي</span><span class="hx"><bdi>#7E5A18</bdi></span><span class="cr"><bdi>5.7:1</bdi> ✓ AA</span></div></div>
           <div class="sw"><div class="chip-c" style="background:#FBF6EC;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></div>
-            <div class="t"><span class="nm">رملي — أرضية</span><span class="hx">#FBF6EC</span><span class="cr">أساس الشاشة</span></div></div>
+            <div class="t"><span class="nm">رملي — أرضية</span><span class="hx"><bdi>#FBF6EC</bdi></span><span class="cr">أساس الشاشة</span></div></div>
           <div class="sw"><div class="chip-c" style="background:#6A5C4E"></div>
-            <div class="t"><span class="nm">محايد ثانوي</span><span class="hx">#6A5C4E</span><span class="cr">6.0:1 ✓ AA</span></div></div>
+            <div class="t"><span class="nm">محايد ثانوي</span><span class="hx"><bdi>#6A5C4E</bdi></span><span class="cr"><bdi>6.0:1</bdi> ✓ AA</span></div></div>
         </div>
       </section>
 
@@ -590,8 +599,8 @@
         <div class="scr" id="scr">
 
           <div class="sb">
-            <span>٥:١٠</span>
-            <span class="right">4G · ٨٤٪</span>
+            <span class="right">4G · 84%</span>
+            <span>5:10</span>
           </div>
 
           <div class="body" id="body">
@@ -602,16 +611,16 @@
                   <span class="kicker">منصة الأسر المنتجة</span>
                   <span class="word">صُنّاع</span>
                 </div>
-                <button class="bell" aria-label="الإشعارات، ٣ غير مقروءة">
-                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-                  <span class="dot">٣</span>
+                <button class="bell" aria-label="الإشعارات، 3 غير مقروءة">
+                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 17.7h14.2l-1.9-2.5v-4.7C17.2 7.6 14.9 5.3 12 5.3S6.8 7.6 6.8 10.5v4.7l-1.9 2.5Z"/><path d="M9.9 20.3c.4 1 1.2 1.6 2.1 1.6s1.7-.6 2.1-1.6"/></svg>
+                  <span class="dot">3</span>
                 </button>
               </div>
 
               <div class="search" role="search">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
                 <span>ابحث عن أسرة أو منتج</span>
-                <span class="kbd">٣٤٠ أسرة</span>
+                <span class="kbd">340 أسرة</span>
               </div>
             </div>
 
@@ -629,7 +638,7 @@
                 <article class="slide">
                   <span class="motif" aria-hidden="true"></span><span class="scrim" aria-hidden="true"></span>
                   <span class="tag">للأسر المسجّلة</span>
-                  <h3>منتجاتك أمام ٤٠ ألف زائر</h3>
+                  <h3>منتجاتك أمام 40 ألف زائر</h3>
                   <p>احجز مساحتك الإعلانية داخل صُنّاع وتصدّر نتائج تصنيفك.</p>
                   <button class="cta">احجز مساحتك
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
@@ -638,7 +647,7 @@
                 <article class="slide" style="background:linear-gradient(215deg,#9C6B3E,#4E3117)">
                   <span class="motif" aria-hidden="true"></span><span class="scrim" aria-hidden="true"></span>
                   <span class="tag">موسم الصيف</span>
-                  <h3>٦٠ أسرة جديدة هذا الشهر</h3>
+                  <h3>60 أسرة جديدة هذا الشهر</h3>
                   <p>بخور، حلويات، ومشاتل من كل بلديات قطر.</p>
                   <button class="cta">استكشف الأسر
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
@@ -668,10 +677,10 @@
                     </div>
                     <span class="rate">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>
-                      4.9 <small>(١٢٨)</small>
+                      <b>4.9</b> <small>(128 تقييم)</small>
                     </span>
                   </div>
-                  <div class="tags"><span>بخور وعطور</span><span>توصيل خلال يوم</span><span>٤٢ منتج</span></div>
+                  <div class="tags"><span>بخور وعطور</span><span>توصيل خلال يوم</span><span>42 منتج</span></div>
                   <button class="visit">زيارة المتجر</button>
                 </div>
               </article>
@@ -695,8 +704,8 @@
                   <span class="cat">حلويات</span>
                   <h4>أسرة الوجبة</h4>
                   <div class="foot">
-                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>4.8</span>
-                    <span class="n">٢٤ منتج</span>
+                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg><b>4.8</b></span>
+                    <span class="n">24 منتج</span>
                   </div>
                 </div>
               </article>
@@ -711,8 +720,8 @@
                   <span class="cat">مشاتل</span>
                   <h4>مشتل ويو</h4>
                   <div class="foot">
-                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>4.6</span>
-                    <span class="n">١٧ منتج</span>
+                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg><b>4.6</b></span>
+                    <span class="n">17 منتج</span>
                   </div>
                 </div>
               </article>
@@ -727,8 +736,8 @@
                   <span class="cat">بخور وعطور</span>
                   <h4>أسرة البلسم</h4>
                   <div class="foot">
-                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>4.9</span>
-                    <span class="n">٣١ منتج</span>
+                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg><b>4.9</b></span>
+                    <span class="n">31 منتج</span>
                   </div>
                 </div>
               </article>
@@ -743,8 +752,8 @@
                   <span class="cat">حرف يدوية</span>
                   <h4>أسرة السدرة</h4>
                   <div class="foot">
-                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg>4.7</span>
-                    <span class="n">٢٨ منتج</span>
+                    <span class="rate"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 21 12 17.3 18.2 21l-1.7-6.9L22 9.3l-7.2-.7Z"/></svg><b>4.7</b></span>
+                    <span class="n">28 منتج</span>
                   </div>
                 </div>
               </article>
@@ -754,24 +763,24 @@
 
           <nav class="tabs" aria-label="التنقّل الرئيسي">
             <button class="tab" aria-current="page">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg>
+              <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg></span>
               الرئيسية
             </button>
             <button class="tab">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 4.8 4h14.4L21 8.5"/><path d="M3 8.5a2.6 2.6 0 0 0 4.5 1.8 2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0A2.6 2.6 0 0 0 21 8.5"/><path d="M5 11.5V20h14v-8.5"/></svg>
+              <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 4.8 4h14.4L21 8.5"/><path d="M3 8.5a2.6 2.6 0 0 0 4.5 1.8 2.6 2.6 0 0 0 4.5 0 2.6 2.6 0 0 0 4.5 0A2.6 2.6 0 0 0 21 8.5"/><path d="M5 11.5V20h14v-8.5"/></svg></span>
               الأسر
             </button>
             <button class="tab">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+              <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg></span>
               البحث
             </button>
             <button class="tab">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.1 5.1 0 0 0-7.2 0L12 7.2l-1.6-1.6a5.1 5.1 0 0 0-7.2 7.2l8.8 8.8 8.8-8.8a5.1 5.1 0 0 0 0-7.2Z"/></svg>
+              <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.1 5.1 0 0 0-7.2 0L12 7.2l-1.6-1.6a5.1 5.1 0 0 0-7.2 7.2l8.8 8.8 8.8-8.8a5.1 5.1 0 0 0 0-7.2Z"/></svg></span>
               المفضلة
-              <span class="bdg">٥</span>
+              <span class="bdg">5</span>
             </button>
             <button class="tab">
-              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+              <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg></span>
               حسابي
             </button>
           </nav>
@@ -780,7 +789,7 @@
       </div>
 
       <div class="ctrls">
-        <button class="ctrl" id="gridBtn" aria-pressed="false">شبكة التباعد ٢٠/٨</button>
+        <button class="ctrl" id="gridBtn" aria-pressed="false">شبكة التباعد 20/8</button>
         <button class="ctrl" id="loadBtn" aria-pressed="false">حالة التحميل</button>
       </div>
     </div>
